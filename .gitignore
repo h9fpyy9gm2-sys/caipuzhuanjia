@@ -1,0 +1,19 @@
+﻿# === 环境 / 密钥 ===
+.env
+.env.local
+.env.*.local
+
+# === Node ===
+node_modules/
+npm-debug.log*
+
+# === 系统 ===
+.DS_Store
+Thumbs.db
+
+# === Cloudflare Workers（已弃用）===
+worker/
+
+# === 本地预览工具 ===
+.vite/
+dist/

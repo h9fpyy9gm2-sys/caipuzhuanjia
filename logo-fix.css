@@ -1,0 +1,6 @@
+.site-header{background:rgba(255,255,255,.98)}
+.main-nav{font-weight:700}
+.main-nav a{font-weight:700}
+.header-phone{font-weight:700}
+.brand-logo{display:block;width:205px;height:auto;max-height:58px;object-fit:contain;object-position:left center;background:#fff}
+@media (max-width:600px){.brand-logo{width:150px;max-height:44px}}

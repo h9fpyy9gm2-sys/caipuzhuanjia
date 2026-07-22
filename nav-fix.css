@@ -1,0 +1,4 @@
+/* Keep the primary navigation visible while the page scrolls. */
+body{padding-top:82px}
+.site-header{position:fixed;top:0;right:0;left:0;z-index:100;box-shadow:0 8px 24px rgba(32,34,31,.07)}
+@media (max-width:600px){body{padding-top:70px}}

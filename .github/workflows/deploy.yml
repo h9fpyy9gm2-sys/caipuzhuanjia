@@ -1,0 +1,53 @@
+﻿name: 自动部署到阿里云服务器
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 准备 SSH 密钥
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' '${{ secrets.SERVER_SSH_KEY }}' > ~/.ssh/caipu_deploy
+          chmod 600 ~/.ssh/caipu_deploy
+          ssh-keyscan -p '${{ secrets.SERVER_PORT }}' '${{ secrets.SERVER_HOST }}' >> ~/.ssh/known_hosts
+
+      - name: 部署前端文件到网站目录
+        run: |
+          rsync -avz --delete -e "ssh -p ${{ secrets.SERVER_PORT }} -i ~/.ssh/caipu_deploy -o StrictHostKeyChecking=no" \
+            --exclude='server/' \
+            --exclude='deploy/' \
+            --exclude='worker/' \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='.gitignore' \
+            ./ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/var/www/caipu-zhuanjia/site/
+
+      - name: 部署后端文件到服务器目录
+        run: |
+          rsync -avz --delete -e "ssh -p ${{ secrets.SERVER_PORT }} -i ~/.ssh/caipu_deploy -o StrictHostKeyChecking=no" \
+            --exclude='.env' \
+            ./server/ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/var/www/caipu-zhuanjia/server/
+
+      - name: 部署后执行（安装依赖 + 重启服务）
+        run: |
+          ssh -p ${{ secrets.SERVER_PORT }} -i ~/.ssh/caipu_deploy -o StrictHostKeyChecking=no \
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} '
+            echo "=== 安装后端依赖 ==="
+            cd /var/www/caipu-zhuanjia/server
+            npm install --production
+
+            echo "=== 重启 PM2 ==="
+            pm2 restart caipu-zhuanjia-api
+
+            echo "=== 重载 Nginx ==="
+            nginx -t && systemctl reload nginx
+
+            echo "=== 部署完成 ==="
+          '

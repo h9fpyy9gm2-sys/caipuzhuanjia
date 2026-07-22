@@ -1,0 +1,9 @@
+{
+  "name": "caipu-zhuanjia-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {"node": ">=20"},
+  "scripts": {"start": "node index.mjs"},
+  "dependencies": {"dotenv": "^16.4.7"}
+}

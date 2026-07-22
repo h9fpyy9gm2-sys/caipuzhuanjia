@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>填写餐饮视觉需求｜菜谱专家</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="nav-fix.css">
+  <link rel="stylesheet" href="contact-form.css">
+  <link rel="stylesheet" href="logo-fix.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="返回菜谱专家首页"><img class="brand-logo" src="assets/images/caipu-logo.jpg" alt="菜谱专家 餐饮广告空间全案"><span class="sr-only">菜谱专家</span></a>
+    <a class="header-phone" href="tel:18879116195">商务咨询 188 7911 6195</a>
+  </header>
+
+  <main class="lead-page">
+    <div class="lead-intro"><p class="eyebrow">PROJECT INTAKE · CAIPU ZHUANJIA</p><h1>把你的门店需求，<em>交给专业团队</em></h1><p>填写基础信息和项目想法，菜谱专家会根据门店类型、城市和服务需求进行整理，稍后由专人与您联系。</p></div>
+    <form class="lead-form" id="lead-form">
+      <div class="form-row"><label>姓名或称呼 <input name="name" required maxlength="50" placeholder="请输入您的称呼"></label><label>联系电话 <input name="phone" required inputmode="tel" maxlength="30" placeholder="请输入手机号或微信电话"></label></div>
+      <div class="form-row"><label>所在城市 <input name="city" maxlength="80" placeholder="例如：南昌、杭州、深圳"></label><label>门店类型 <select name="storeType"><option value="">请选择门店类型</option><option>江西菜 / 江西小炒</option><option>人文赣菜 / 宴席酒楼</option><option>新中式餐饮</option><option>连锁餐饮品牌</option><option>快餐 / 夜宵 / 火锅</option><option>其他餐饮门店</option></select></label></div>
+      <fieldset><legend>计划咨询的服务</legend><div class="service-checks"><label><input type="checkbox" name="services" value="餐饮灯箱">餐饮灯箱</label><label><input type="checkbox" name="services" value="明档设计">明档设计</label><label><input type="checkbox" name="services" value="菜谱 / iPad菜单">菜谱 / iPad菜单</label><label><input type="checkbox" name="services" value="美食摄影">美食摄影</label><label><input type="checkbox" name="services" value="外卖视觉">外卖视觉</label><label><input type="checkbox" name="services" value="菜品动图 / 视频">菜品动图 / 视频</label><label><input type="checkbox" name="services" value="门店全案">门店全案</label></div></fieldset>
+      <label>项目需求 <textarea name="requirement" required maxlength="2000" placeholder="例如：准备在南昌开一家江西小炒，想做明档、灯箱和整套菜单视觉"></textarea></label>
+      <p class="form-note">提交后，您的信息仅用于本次餐饮视觉咨询，稍后会有专人与您联系。</p>
+      <button class="button button-primary" type="submit">提交需求 <span>↗</span></button>
+      <p class="form-message" id="form-message" role="status" aria-live="polite"></p>
+    </form>
+  </main>
+
+  <footer class="site-footer"><div><strong>菜谱专家</strong><p>餐饮盈利全场景广告落地服务商</p></div><p>商务咨询：18879116195</p><p>© 2026–2046 菜谱专家</p></footer>
+  <script src="api-config.js"></script>
+  <script src="contact-form.js" defer></script>
+</body>
+</html>

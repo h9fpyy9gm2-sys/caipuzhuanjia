@@ -1,0 +1,36 @@
+.customer-float{position:fixed;right:24px;bottom:28px;z-index:120;width:62px;height:62px;touch-action:none}
+.customer-trigger{position:relative;display:grid;place-items:center;width:62px;height:62px;padding:0;border:0;border-radius:50%;background:var(--orange,#d95732);color:#fff;box-shadow:0 10px 28px rgba(217,87,50,.28);cursor:grab;user-select:none;transition:transform .2s,box-shadow .2s}
+.customer-trigger:hover{transform:translateY(-3px);box-shadow:0 14px 32px rgba(217,87,50,.36)}
+.customer-trigger:active,.customer-float.is-dragging .customer-trigger{cursor:grabbing;transform:scale(.96)}
+.customer-glyph{font-size:16px;font-weight:800;line-height:1;letter-spacing:0}
+.customer-pulse{position:absolute;right:3px;top:3px;width:11px;height:11px;border:2px solid #fff;border-radius:50%;background:#6fcf83}
+.customer-pulse:after{content:"";position:absolute;inset:-5px;border:1px solid rgba(111,207,131,.65);border-radius:50%;animation:customer-ping 1.8s infinite}
+.customer-panel{position:fixed;width:min(360px,calc(100vw - 32px));padding:18px;background:var(--white,#fffefa);border:1px solid var(--line,#d9d8d0);box-shadow:0 18px 48px rgba(32,34,31,.17);color:var(--ink,#20221f)}
+.customer-panel[hidden]{display:none}
+.customer-panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;padding-bottom:13px;border-bottom:1px solid var(--line,#d9d8d0)}
+.customer-close{position:absolute;right:12px;top:10px;width:30px;height:30px;padding:0;border:0;background:transparent;color:var(--muted,#72756e);font-size:25px;line-height:1;cursor:pointer}
+.customer-kicker{margin-bottom:12px;color:var(--orange,#d95732);font:600 10px/1 "DM Sans",sans-serif;letter-spacing:.15em}
+.customer-panel h2{margin:0 24px 0 0;font-size:22px;line-height:1.25}
+.customer-messages{display:grid;gap:10px;max-height:210px;overflow:auto;padding:14px 2px}
+.customer-message{max-width:92%;padding:10px 12px;font-size:12px;line-height:1.65;word-break:break-word}
+.customer-message-assistant{justify-self:start;background:#f0eee7}
+.customer-message-user{justify-self:end;background:var(--orange,#d95732);color:#fff}
+.customer-message-loading{color:var(--muted,#72756e);background:#f0eee7}
+.customer-message a{color:var(--orange,#d95732);text-decoration:underline;text-underline-offset:2px}
+.customer-sources{display:grid;gap:3px;margin-top:7px;padding-top:7px;border-top:1px solid rgba(32,34,31,.12);font-size:10px}
+.customer-lead-link{display:block;margin-top:10px;padding:9px 11px;background:var(--orange,#d95732);color:#fff!important;text-decoration:none!important;text-align:center;font-size:11px;font-weight:700}
+.customer-form{display:grid;grid-template-columns:1fr auto;gap:7px;border-top:1px solid var(--line,#d9d8d0);padding-top:12px}
+.customer-form input{min-width:0;width:100%;height:38px;padding:0 10px;border:1px solid var(--line,#d9d8d0);background:#fff;color:var(--ink,#20221f);font:12px inherit;outline:none}
+.customer-form input:focus{border-color:var(--orange,#d95732);box-shadow:0 0 0 2px rgba(217,87,50,.12)}
+.customer-form button{height:38px;padding:0 13px;border:0;background:var(--orange,#d95732);color:#fff;font-size:12px;font-weight:700;cursor:pointer}
+.customer-form button:disabled{opacity:.55;cursor:wait}
+.customer-toolbar{display:flex;justify-content:space-between;gap:12px;padding:10px 0;color:var(--muted,#72756e);font-size:10px}
+.customer-search-state,.customer-status{display:flex;align-items:center;gap:5px}
+.customer-search-state i,.customer-status i{display:block;width:6px;height:6px;border-radius:50%;background:#6fcf83}
+.customer-metrics{display:flex;gap:18px;padding:9px 0;border-top:1px solid var(--line,#d9d8d0);border-bottom:1px solid var(--line,#d9d8d0);color:var(--muted,#72756e);font-size:10px}
+.customer-metrics b{margin-left:3px;color:var(--ink,#20221f);font:700 13px "DM Sans",sans-serif}
+.customer-panel .customer-phone{display:block;margin:0 0 8px;color:var(--orange,#d95732);font:700 24px/1.2 "DM Sans",sans-serif}
+.customer-panel>.customer-phone{margin:13px 0 0;font-size:14px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@keyframes customer-ping{0%,45%{transform:scale(.5);opacity:.9}75%,100%{transform:scale(1.55);opacity:0}}
+@media (max-width:600px){.customer-float{right:16px;bottom:18px}.customer-trigger{width:56px;height:56px}.customer-float{width:56px;height:56px}.customer-panel{padding:16px}.customer-messages{max-height:180px}}
