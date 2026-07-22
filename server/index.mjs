@@ -129,13 +129,40 @@ async function chat(request, response) {
   return sendJson(response,200,{...result,leadForm},request);
 }
 
+function normalizeMetrics(metrics) {
+  const totalVisits = Number(metrics?.totalVisits);
+  return {
+    ...(metrics && typeof metrics === "object" ? metrics : {}),
+    totalVisits: Number.isFinite(totalVisits) && totalVisits >= 0 ? Math.floor(totalVisits) : 0
+  };
+}
+
 async function readMetrics() {
-  try { return JSON.parse(await fs.readFile(METRICS_FILE,"utf8")); } catch (_) { return {totalVisits:0}; }
+  try { return normalizeMetrics(JSON.parse(await fs.readFile(METRICS_FILE,"utf8"))); } catch (_) { return {totalVisits:0}; }
 }
 
 async function writeMetrics(metrics) {
   await fs.mkdir(path.dirname(METRICS_FILE),{recursive:true});
-  await fs.writeFile(METRICS_FILE,JSON.stringify(metrics,null,2),"utf8");
+  const temporaryFile = `${METRICS_FILE}.${process.pid}.tmp`;
+  await fs.writeFile(temporaryFile,JSON.stringify(normalizeMetrics(metrics),null,2),"utf8");
+  await fs.rename(temporaryFile,METRICS_FILE);
+}
+
+let metricsQueue = Promise.resolve();
+
+function withMetricsLock(operation) {
+  const result = metricsQueue.then(operation);
+  metricsQueue = result.catch(() => {});
+  return result;
+}
+
+async function updateMetrics(operation) {
+  return withMetricsLock(async () => {
+    const stored = await readMetrics();
+    await operation(stored);
+    await writeMetrics(stored);
+    return stored;
+  });
 }
 
 async function leads(request, response) {
@@ -168,9 +195,11 @@ async function metrics(request, response) {
   for (const [key, timestamp] of consultationHeartbeats) if (timestamp < cutoff) consultationHeartbeats.delete(key);
   if (body.event === "leave") { visitorHeartbeats.delete(id); consultationHeartbeats.delete(id); }
   else { visitorHeartbeats.set(id,now); if (body.consulting) consultationHeartbeats.set(id,now); else consultationHeartbeats.delete(id); }
-  const stored = await readMetrics();
-  if (body.event === "visit") stored.totalVisits = Number(stored.totalVisits || 0) + 1;
-  await writeMetrics(stored);
+  const stored = await updateMetrics((metrics) => {
+    // Only a new page visit increments the persistent counter. Heartbeats and
+    // leave events only maintain the temporary online-user maps above.
+    if (body.event === "visit") metrics.totalVisits += 1;
+  });
   return sendJson(response,200,{activeVisitors:visitorHeartbeats.size,activeConsultations:consultationHeartbeats.size,totalVisits:stored.totalVisits},request);
 }
 

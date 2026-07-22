@@ -251,7 +251,7 @@
 
     const requestMetrics = async (event = "heartbeat") => {
       try {
-        const response = await fetch(`${apiBase}/metrics`, {method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({event,visitorId,consulting:consultationActive})});
+        const response = await fetch(`${apiBase}/metrics`, {method:"POST",headers:{"content-type":"application/json"},keepalive:event === "visit",body:JSON.stringify({event,visitorId,consulting:consultationActive})});
         if (!response.ok) return;
         const data = await response.json();
         setApiState("service");
@@ -298,9 +298,14 @@
     requestMetrics("visit");
     window.setInterval(() => requestMetrics("heartbeat"), 20000);
     window.setInterval(checkServiceHealth, 30000);
-    window.addEventListener("beforeunload", () => {
+    let leaveSent = false;
+    const sendLeaveMetrics = () => {
+      if (leaveSent) return;
+      leaveSent = true;
       const payload = JSON.stringify({event:"leave",visitorId,consulting:consultationActive});
-      navigator.sendBeacon?.(`${apiBase}/metrics`, new Blob([payload], {type:"application/json"}));
-    });
+      const beaconSent = navigator.sendBeacon?.(`${apiBase}/metrics`, new Blob([payload], {type:"application/json"}));
+      if (!beaconSent) fetch(`${apiBase}/metrics`, {method:"POST",headers:{"content-type":"application/json"},keepalive:true,body:payload}).catch(() => {});
+    };
+    window.addEventListener("pagehide", sendLeaveMetrics);
   }
 })();
